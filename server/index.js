@@ -2,7 +2,6 @@ const http = require('http')
 const { WebSocketServer } = require('ws')
 
 const url = require('url')
-const { measureMemory } = require('vm')
 const uuidv4 = require("uuid").v4
 
 const server = http.createServer()
@@ -19,7 +18,7 @@ const brodcast = () =>{
   Object.keys(connections).forEach(uuid => {
     // guardando cada "connection" de los uuid en "connection"
     const connection = connections[uuid]
-    console.log(connection)
+    // console.log(connection)
     // mandar el mensaje actualizado de la posicion del mouse a cada cliente
     const message = JSON.stringify(users)
     connection.send(message)
@@ -33,12 +32,15 @@ const handleMessage = (bytes, uuid) => { // los mensajes llegan como bytes y hay
   user.state = message
 
   brodcast()
-  console.log(message)
+  console.log(`${user.username} updated position: ${JSON.stringify(user.state)}`)
   // { "x":150, "y":130 }
 }
 
 const handleClose = (uuid) => {
-
+  console.log(`${users[uuid].username} disconnected`)
+  delete connections[uuid]
+  delete users[uuid]
+  brodcast()
 }
 
 wsServer.on("connection", (connection, request) =>{
@@ -49,7 +51,7 @@ wsServer.on("connection", (connection, request) =>{
   console.log(uuid)
 
   connections[uuid] = connection
-  console.log(connections)
+  // console.log(connections)
 
   users[uuid] = {
     username: username,
