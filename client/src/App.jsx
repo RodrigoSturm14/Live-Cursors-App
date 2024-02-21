@@ -1,14 +1,15 @@
 //import './App.css'
 import { useState } from 'react'
 import { Login } from './components/Login.jsx'
+import { Home } from './Home.jsx'
 
 
 function App() {
 const [username, setUsername] = useState("")
-  return (
-    <>
-      <Login updateUsername={setUsername} />
-    </>
+  return username ? (
+    <Home/>
+  ) : (
+    <Login updateUsername={setUsername} />
   )
 }
 
