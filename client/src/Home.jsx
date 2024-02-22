@@ -10,16 +10,31 @@ export function Home({ username }) {
   const { sendJsonMessage } = useWebSocket(WS_URL, {
     queryParams: { username }
   })
+  // sendJsonMessageThrottled es una copia de la funcion sendJsonMessage pero con el timer de 50ms
+  const THROTTLE = 50
+  const sendJsonMessageThrottled = throttle(sendJsonMessage, THROTTLE)
 
-  // throttle(sendJsonMessage, )
-
-  // useEffect(() =>{
-
-  // }, [])
-
+  useEffect(() =>{
+    console.log('hola render')
+    
+    // subcripcion al evento mousemove y declaracion del evento; cada vez q 
+    // ocurra el eventos, se envia mensaje json 
+    // la subcripcion al evento se ejecuta una sola vez, por q esta en el useEffect
+    window.addEventListener("mousemove", (e) =>{
+      sendJsonMessageThrottled({ 
+        x: e.clientX,
+        y: e.clientY
+      })
+    })
+  }, [])
+  // el componente se re-renderiza cada vez q el useWebSocket se usa, o sea cada 
+  // vez q hace una accion (enviar json, conectarse al server, etc.)
   return(
     <>
       <h1>Hola {username}</h1>
+      {
+        console.log('hola')
+      }
     </>
   )
 }
