@@ -7,7 +7,7 @@ import { Home } from './Home.jsx'
 function App() {
 const [username, setUsername] = useState("")
   return username ? (
-    <Home/>
+    <Home username={username}/>
   ) : (
     <Login updateUsername={setUsername} />
   )

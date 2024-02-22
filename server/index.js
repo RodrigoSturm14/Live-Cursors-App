@@ -45,6 +45,8 @@ const handleClose = (uuid) => {
 
 wsServer.on("connection", (connection, request) =>{
   // ws://localhost:8000?username=rodri --> el ? es una query
+  // debug query parameters
+  // console.log(request.url)
   const { username } = url.parse(request.url, true).query // recuperar url y obtener username de la query
   const uuid = uuidv4()
   console.log(username)
